@@ -23,12 +23,11 @@ for (suit of suits) {
 //deal cards to dealer and player
 
 const deckArray = Array.from(deck)
-console.log(deckArray[49])
 const player = new Map()
 const dealer = new Map()
 
+let previousRandomIndexes = []
 for (i = 0; i < 2; i++) {
-
     dealCardsDealer()
     dealCardsPlayer()
 }
@@ -56,15 +55,22 @@ let dealerSum = sumHandDealer()
 //game plays out
 gameLogic()
 
-functions
-
+// functions
 function dealCardsPlayer() {
     let playerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    while (previousRandomIndexes.includes(playerRandomIndex) === true) {
+        playerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    }
+    previousRandomIndexes.push(playerRandomIndex)
     player.set(deckArray[playerRandomIndex][0], deckArray[playerRandomIndex][1])
 }
 
 function dealCardsDealer() {
     let dealerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    while (previousRandomIndexes.includes(dealerRandomIndex) === true) {
+        dealerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    }
+    previousRandomIndexes.push(dealerRandomIndex)
     dealer.set(deckArray[dealerRandomIndex][0], deckArray[dealerRandomIndex][1])
 }
 
