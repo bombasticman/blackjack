@@ -1,20 +1,20 @@
 //generate cards
 suits = ["heart", "spades", "diamonds", "clubs"]
-values = [2,3,4,5,6,7,8,9,10,"J","Q","K","A"]
+values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]
 const deck = new Map()
 
-for(suit of suits){
-    for(value of values){
+for (suit of suits) {
+    for (value of values) {
         //value for J,Q,K
-        if(value == "J" || value == "Q" || value == "K"){
+        if (value == "J" || value == "Q" || value == "K") {
             deck.set(`${value} of ${suit}`, 10)
         }
         //value for Ace
-        else if(value == "A"){
+        else if (value == "A") {
             deck.set(`${value} of ${suit}`, 1)
         }
         //face-up values
-        else{
+        else {
             deck.set(`${value} of ${suit}`, value)
         }
     }
@@ -27,19 +27,134 @@ const deckArray = Array.from(deck)
 const player = new Map()
 const dealer = new Map()
 
-for(i=0; i < 2; i++){
+for (i = 0; i < 2; i++) {
 
-    let playerRandomIndex = Math.floor(Math.random() * deckArray.length)
-    let dealerRandomIndex = Math.floor(Math.random() * deckArray.length)
-    
-    player.set(deckArray[playerRandomIndex][0], deckArray[playerRandomIndex][1])
-    dealer.set(deckArray[dealerRandomIndex][0], deckArray[dealerRandomIndex][1])
+    dealCardsDealer()
+    dealCardsPlayer()
 }
 
+
+
 console.log("----STARTING HANDS----")
+console.log("----PLAYER----")
 console.log(player)
+console.log("----DEALER----")
 console.log(dealer)
 
 //game logic
 
-//
+//needed values
+const playerValues = player.values()
+const dealerValues = dealer.values()
+
+//sum of the card's values in dealer's and player's hands
+console.log("----TOTAL VALUE OF CARDS----")
+console.log("----PLAYER----")
+let playerSum = sumHandPlayer()
+console.log("----DEALER----")
+let dealerSum = sumHandDealer()
+
+//if both values are lower than 21
+if (playerSum < 21 && dealerSum < 21) {
+    console.log("----NO 21 CONTINUE----")
+    dealCardsPlayer()
+    console.log("----PLAYER HAND----")
+    console.log(player)
+    playerSum = sumHandPlayer()
+    console.log("----PLAYER HAND VALUE----")
+    if (playerSum === 21) {
+        return console.log("----PLAYER WINS----")
+    }
+    else if (playerSum > 21) {
+        return console.log("----DEALER WINS----")
+    }
+    else {
+        console.log("----DEALER GETS A CARD----")
+        dealCardsDealer()
+        console.log("----DEALER HAND----")
+        console.log(dealer)
+        dealerSum = sumHandDealer()
+        console.log("----DEALER HAND VALUE----")
+        if (dealerSum === 21) {
+            return console.log("----DEALER WINS----")
+        }
+        else if (dealerSum > 21) {
+            return console.log("----PLAYER WINS----")
+            
+        } 
+        else {
+            console.log("----PLAYER GETS A CARD----")
+
+        }
+    }
+}
+
+
+//functions
+
+function dealCardsPlayer() {
+    let playerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    player.set(deckArray[playerRandomIndex][0], deckArray[playerRandomIndex][1])
+}
+
+function dealCardsDealer() {
+    let dealerRandomIndex = Math.floor(Math.random() * deckArray.length)
+    dealer.set(deckArray[dealerRandomIndex][0], deckArray[dealerRandomIndex][1])
+}
+
+function sumHandPlayer() {
+    let playerSum = 0
+    for (let value of player.values()) {
+        playerSum += value
+    }
+    console.log(playerSum)
+    return playerSum
+}
+
+function sumHandDealer() {
+    let dealerSum = 0
+    for (let value of dealer.values()) {
+        dealerSum += value
+    }
+    console.log(dealerSum)
+    return dealerSum
+}
+
+function gameLogic() {
+    if (playerSum < 21 && dealerSum < 21) {
+        console.log("----NO 21 CONTINUE----")
+        dealCardsPlayer()
+        console.log("----PLAYER HAND----")
+        console.log(player)
+        playerSum = sumHandPlayer()
+        console.log("----PLAYER HAND VALUE----")
+        if (playerSum === 21) {
+            return console.log("----PLAYER WINS----")
+        }
+        else if (playerSum > 21) {
+            return console.log("----DEALER WINS----")
+        }
+        else {
+            console.log("----DEALER GETS A CARD----")
+            dealCardsDealer()
+            console.log("----DEALER HAND----")
+            console.log(dealer)
+            dealerSum = sumHandDealer()
+            console.log("----DEALER HAND VALUE----")
+            if (dealerSum === 21) {
+                return console.log("----DEALER WINS----")
+            }
+            else if (dealerSum > 21) {
+                return console.log("----PLAYER WINS----")
+                
+            } 
+            else {
+                console.log("----PLAYER GETS A CARD----")
+    
+            }
+        }
+    }
+    else if(playerSum === 21){
+        return console.log("----PLAYER WINS----")
+    }
+}
